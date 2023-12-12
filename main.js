@@ -1,6 +1,11 @@
 const request = require("request");
 const cheerio = require("cheerio");
+const fs = require("fs");
+const path = require("path");
 const scorecardObj = require("./scorecardDetail");
+
+const iplPath = path.join(__dirname, "wc2023");    // file path ipl folder - __dirname = current folder
+dirCreater(iplPath);   
 
 // const url = "https://www.espncricinfo.com/series/ipl-2020-21-1210595";     // home page of cric Info 
 const url = "https://www.espncricinfo.com/series/icc-cricket-world-cup-2023-24-1367856";
@@ -19,7 +24,7 @@ function extractAllMatchesLink(html){
 
     let viewAllMatchesEle = $("a[title='View All Results']");
     let viewAllMatcheslink = viewAllMatchesEle.attr('href');
-    let fullLink = ("https://www.espncricinfo.com" + viewAllMatcheslink).trim();    // link of "view All Matches"
+    let fullLink = ("https://www.espncricinfo.com" + viewAllMatcheslink).trim();    // full link of "view All Matches"
     getAllMatchesLink(fullLink);     // get all matches link 
 }
 
@@ -43,5 +48,10 @@ function  allScorecardLink(html){
         let fullLink = ("https://www.espncricinfo.com" + link).trim();
 
         scorecardObj.ps(fullLink);     // match detail         // asyncronous nature 
+    }
+}
+function dirCreater(filePath){
+    if(fs.existsSync(filePath)=== false){
+        fs.mkdirSync(filePath);    // create the directory
     }
 }
